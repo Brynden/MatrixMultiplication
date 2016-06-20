@@ -31,7 +31,7 @@ void MultiplyStrassen3(const Matrix &, const Matrix &, Matrix &, int, int, int, 
 
 int main() {
 
-    size_t num = 16;
+    size_t num = 256;
     Matrix A(num, Row(num));
     Matrix B(num, Row(num));
     Matrix C(num, Row(num,0));
@@ -109,21 +109,13 @@ int main() {
     MultiplyRecursive2(A, B, D, 0,0,0,0,num);
     clock_t end = clock();
     double diff = end - begin;
-    cout<<"Recursive: "<< diff/CLOCKS_PER_SEC<<endl;
+    cout<<"Recursive2: "<< diff/CLOCKS_PER_SEC<<endl;
 
     begin = clock();
     MultiplyNaive(A, B, C);
     end = clock();
     diff = end - begin;
     cout<<"Naive: "<< diff/CLOCKS_PER_SEC<<endl;
-
-
-
-    begin = clock();
-    MultiplyStrassen2(A, B, E, num);
-    end = clock();
-    diff = end - begin;
-    cout<<"Strassen2: "<< diff/CLOCKS_PER_SEC<<endl;
 
 
     begin = clock();
@@ -138,8 +130,7 @@ int main() {
 
     bool igual = (C==D);
     cout<<igual<<endl;
-    igual = (C==E);
-    cout<<igual<<endl;
+
     igual = (C==F);
     cout<<igual<<endl;
 
@@ -176,7 +167,7 @@ void MultiplyNaive2(const Matrix &A, const Matrix &B, Matrix &C, int row_a, int 
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
             for (int k = 0; k < n; ++k) {
-                C[i][j] += A[i+row_a][j+column_a] * B[i+row_b][j+column_b];
+                C[i][j] += A[i+row_a][k+column_a] * B[k+row_b][j+column_b];
             }
         }
     }
@@ -425,7 +416,7 @@ void MultiplyStrassen2(const Matrix &A, const Matrix &B, Matrix &C, size_t lengt
 
 void MultiplyStrassen3(const Matrix &A, const Matrix &B, Matrix &C, int row_a, int column_a, int row_b, int column_b, size_t length) {
     if (length == 16) {
-        MultiplyNaive2(A, B, C, row_a, column_a, row_b, column_b, length);
+        MultiplyRecursive2(A, B, C, row_a,column_a,row_b,column_b,length);
     }
     else {
         int i, j;
